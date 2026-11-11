@@ -88,7 +88,10 @@ You can confirm this yourself in your browser's Network panel while analyzing a 
 
 ## Live site
 
-Not yet deployed. The GitHub Pages URL will be added here once deployment is verified.
+**<https://jiahao419.github.io/csv-quality-checker/>**
+
+Published from `main` at the repository root via GitHub Pages. No install needed: open the
+link, load a CSV, and the analysis runs in your own browser.
 
 ## Course
 
