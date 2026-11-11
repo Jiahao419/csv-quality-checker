@@ -37,6 +37,9 @@ function splitRecords(text) {
   let row = [];
   let field = '';
   let inQuotes = false;
+  // True once the current field has any content or an opening quote, so that a
+  // final field that parses to empty (a bare "" at end of file) is still a field.
+  let pendingField = false;
   let quoteStartLine = 1;
   let line = 1;
   let i = 0;
@@ -44,6 +47,7 @@ function splitRecords(text) {
   const endField = () => {
     row.push(field);
     field = '';
+    pendingField = false;
   };
   const endRecord = () => {
     endField();
@@ -66,6 +70,7 @@ function splitRecords(text) {
         continue;
       }
       if (ch === '\n') line += 1;
+      pendingField = true;
       field += ch; // newlines and commas are literal inside quotes
       i += 1;
       continue;
@@ -73,6 +78,7 @@ function splitRecords(text) {
 
     if (ch === '"' && field === '') {
       inQuotes = true;
+      pendingField = true;
       quoteStartLine = line;
       i += 1;
       continue;
@@ -93,6 +99,7 @@ function splitRecords(text) {
     }
 
     // A quote inside an already-started unquoted field is kept literally.
+    pendingField = true;
     field += ch;
     i += 1;
   }
@@ -103,8 +110,10 @@ function splitRecords(text) {
     );
   }
 
-  // Flush a final record that is not newline-terminated.
-  if (field !== '' || row.length > 0) endRecord();
+  // Flush a final record that is not newline-terminated. pendingField covers the
+  // case where the last field was quoted but empty ("" at end of file), which has
+  // no leftover text yet is still a real field.
+  if (pendingField || field !== '' || row.length > 0) endRecord();
 
   return records;
 }
