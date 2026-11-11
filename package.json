@@ -1,0 +1,12 @@
+{
+  "name": "csv-quality-checker",
+  "version": "0.1.0",
+  "description": "Privacy-first, browser-based CSV data quality checker",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/",
+    "serve": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

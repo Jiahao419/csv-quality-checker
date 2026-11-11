@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Node (only used for running tests; nothing is installed)
+node_modules/
+npm-debug.log*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Never commit real datasets. examples/ holds synthetic files only.
+*.csv
+!examples/*.csv
