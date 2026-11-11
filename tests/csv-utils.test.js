@@ -80,6 +80,30 @@ test('parses newlines embedded in quoted fields', () => {
   assert.deepEqual(rows[0], ['line one\nline two', '2']);
 });
 
+test('keeps a quoted empty field at end of file with no trailing newline', () => {
+  // Regression: the final-record flush tested only for leftover text, so a bare
+  // "" at EOF left nothing behind and the whole row was dropped.
+  const { headers, rows } = parseCsv('value\n""');
+  assert.deepEqual(headers, ['value']);
+  assert.equal(rows.length, 1, 'the quoted empty field is still a data row');
+  assert.deepEqual(rows[0], ['']);
+
+  const result = analyzeCsv('value\n""');
+  assert.equal(result.rowCount, 1);
+  assert.equal(result.columns[0].missing, 1);
+  assert.equal(result.columns[0].missingPercent, 100);
+});
+
+test('a quoted empty field at EOF does not swallow earlier rows', () => {
+  const { rows } = parseCsv('a\nx\n""');
+  assert.equal(rows.length, 2, 'both the real row and the empty one survive');
+  assert.deepEqual(rows, [['x'], ['']]);
+});
+
+test('a trailing newline after a quoted empty field changes nothing', () => {
+  assert.deepEqual(parseCsv('value\n""').rows, parseCsv('value\n""\n').rows);
+});
+
 test('CRLF and LF produce identical results', () => {
   const lf = analyzeCsv('a,b\n1,\n2,3\n');
   const crlf = analyzeCsv('a,b\r\n1,\r\n2,3\r\n');
