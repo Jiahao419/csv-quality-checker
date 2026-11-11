@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV Quality Checker</title>
+<meta name="description" content="Check a CSV file for missing values and duplicate rows, entirely in your browser.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="intro">
+    <h1>CSV Quality Checker</h1>
+    <p class="tagline">
+      Check a CSV file for missing values, duplicate rows, and basic statistics.
+      Your file never leaves your computer.
+    </p>
+  </header>
+
+  <section aria-labelledby="pick-heading">
+    <h2 id="pick-heading" class="visually-hidden">Choose a file</h2>
+
+    <div id="dropzone" class="dropzone">
+      <p class="dropzone-text">Drag a CSV file here</p>
+      <p class="dropzone-or">or</p>
+      <label class="button" for="file-input">
+        Choose a CSV file
+        <input id="file-input" type="file" accept=".csv,text/csv" class="visually-hidden">
+      </label>
+      <p class="hint">Maximum file size 5&nbsp;MB. Nothing is uploaded.</p>
+    </div>
+
+    <p id="filename" class="filename" hidden></p>
+    <div id="error" class="error" role="alert" hidden></div>
+  </section>
+
+  <section id="results" aria-labelledby="results-heading" hidden>
+    <h2 id="results-heading">Results</h2>
+
+    <ul class="metrics">
+      <li class="metric">
+        <span class="metric-value" id="m-rows">0</span>
+        <span class="metric-label">data rows</span>
+      </li>
+      <li class="metric">
+        <span class="metric-value" id="m-cols">0</span>
+        <span class="metric-label">columns</span>
+      </li>
+      <li class="metric">
+        <span class="metric-value" id="m-dupes">0</span>
+        <span class="metric-label">duplicate rows</span>
+      </li>
+    </ul>
+
+    <h3>Missing values by column</h3>
+    <div class="table-scroll">
+      <table>
+        <caption class="visually-hidden">Missing cells for each column</caption>
+        <thead>
+          <tr>
+            <th scope="col">Column</th>
+            <th scope="col" class="num">Missing</th>
+            <th scope="col" class="num">Percent</th>
+          </tr>
+        </thead>
+        <tbody id="missing-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="definitions" aria-labelledby="defs-heading">
+    <h2 id="defs-heading">How these numbers are counted</h2>
+    <ul>
+      <li>The header row is <strong>not</strong> counted as a data row.</li>
+      <li>A cell counts as <strong>missing</strong> if it is empty or contains only whitespace.</li>
+      <li>Percentages are calculated against the number of <strong>data rows</strong>.</li>
+      <li>
+        A <strong>duplicate</strong> is any repeated row after its first occurrence,
+        compared on trimmed values and case-sensitively.
+      </li>
+    </ul>
+  </section>
+
+  <footer class="privacy">
+    <h2>Privacy</h2>
+    <p>
+      This page has no backend. Your file is read with the browser's File API and
+      analyzed in memory on your own machine. No file contents are sent anywhere, and
+      the page works offline once loaded. You can confirm this in your browser's
+      Network panel.
+    </p>
+    <p class="repo">
+      <a href="https://github.com/Jiahao419/csv-quality-checker">Source on GitHub</a>
+    </p>
+  </footer>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

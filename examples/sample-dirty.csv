@@ -1,0 +1,9 @@
+id,name,email,score
+1,Alice,alice@example.com,90
+2,Bob,,85
+3,Carol,carol@example.com,
+2,Bob,,85
+5,"Davis, Dana",dana@example.com,77
+6,Eve,   ,88
+7,Frank,frank@example.com,91
+2,Bob,,85
